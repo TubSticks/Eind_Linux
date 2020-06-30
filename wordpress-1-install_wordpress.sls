@@ -9,18 +9,14 @@ Make sure are needed packages are installed:
 
 Make sure Wordpress is configured correctly:
   file.managed:
-    - name: /etc/apache2/sites.available/wordpress.conf
+    - name: /etc/apache2/sites-available/wordpress.conf
     - source: salt://wordpress.conf
 
-Upload script to Wordpress machine:
+Configure Wordpress to use the correct database:
   file.managed:
-    - name: /usr/local/bin/config-restart-apache2-mysql.sh
-    - source: salt://config-restart.apache2-mysql.sh
+    - name: /etc/wordpress/config-localhost.php
+    - source: salt://wordpress.php
 
-Run script for configuring/restarting Apache2 service and configuring new database:
-  cmd.run:
-    - name: /usr/local/bin/config-restart-apache2-mysql
-    - cwd: /
-    - stateful: True
-
-
+Start mysql service:
+  service.running:
+    - name: mysql
